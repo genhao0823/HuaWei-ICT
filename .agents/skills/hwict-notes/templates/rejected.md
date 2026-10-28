@@ -31,4 +31,4 @@
 
 ## 适用范围
 
-- `path/to/owning/code/`
+- `docs/`

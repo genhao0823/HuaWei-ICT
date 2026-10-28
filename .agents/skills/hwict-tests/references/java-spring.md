@@ -7,9 +7,8 @@
 - MySQL 方言集成测试：`*MySqlValidationIT.java`，必须保留
   `@EnabledIfEnvironmentVariable(named = "RUN_MYSQL_VALIDATION_TESTS", matches = "true")`
   门控与 `@ActiveProfiles("test")`；直连隔离 MySQL 验证 DDL、时间列、索引
-  与分批清理等方言行为（参见现有
-  `AiDiagnosticRunMySqlValidationIT` 的写法：校验 `flyway_schema_history`
-  与 `information_schema`，而非只断言 Mapper 返回值）。
+  与分批清理等方言行为（骨架建立后新增的 `*MySqlValidationIT` 应校验
+  `flyway_schema_history` 与 `information_schema`，而非只断言 Mapper 返回值）。
 
 ## 有界等待
 

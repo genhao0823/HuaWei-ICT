@@ -63,9 +63,10 @@ user-invocable: true
 |------|------|
 | Java 后端 | `./mvnw test`（`server/`） |
 | REST 契约 | 更新 `docs/openapi/` 对应 JSON + 前端类型定义对齐 |
-| 前端 | `pnpm typecheck` + `pnpm lint` + `pnpm test`（`web/`） |
+| 前端 | `pnpm typecheck` + `pnpm lint` + `pnpm test`；交付前 `pnpm build`（`web/`，脚本以 `package.json` 为准） |
 | 数据库迁移 | 只新增 Flyway 版本脚本（不改已执行脚本）+ `./mvnw test` |
 | 决策笔记 | `node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs`（PR 上由 CI 自动执行） |
+| 文档 / 链接 | `node .agents/skills/hwict-docs/scripts/check-docs-links.mjs`（PR 上由 CI 自动执行） |
 | 比赛/项目文档 | 交叉引用的路径存在；不含真实凭据、内网 IP |
 | CI 工作流（`.github/workflows/`） | YAML 缩进与触发路径自查；实际运行以 Actions 首次执行为准 |
 

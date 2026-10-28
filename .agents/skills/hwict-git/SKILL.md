@@ -78,7 +78,7 @@ docs(readme): 更新项目 README 和部署文档
 ## 3. 提交粒度（小步快跑）
 
 - 一个 commit 只做一件事
-- 硬性要求：每完成一个模块功能，必须提交一次本地 Git commit
+- 完成模块后应形成独立提交，但是否执行由用户明确授权
 - 模块功能包括但不限于：后端接口模块、数据库迁移模块、认证模块、核心 AI 能力模块、前端页面模块、文档阶段成果、比赛材料阶段成果
 - **PR 一律合入 preview 分支**（不直接合 main）：功能分支开发，PR 目标为
   preview，由队长批准合入；preview 阶段性稳定后，由队长从 preview 合入
@@ -92,6 +92,7 @@ docs(readme): 更新项目 README 和部署文档
 - `git diff` 确认无意外修改
 - 目标分支正确：PR 目标为 preview（不是 main）；本地不直接推 main 或他人分支
 - remote 配置正确
+- `git config user.email` 与 GitHub 账号绑定邮箱一致，否则提交不归属账号、显示 unverified
 - 未跟踪文件已被有意处理（不是构建产物或敏感文件）
 - 没有 `.env` / 密码 / Token / 证书 / 私钥 / 数据库备份
 

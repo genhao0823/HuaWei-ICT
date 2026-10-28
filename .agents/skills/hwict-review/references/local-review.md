@@ -21,7 +21,7 @@
 - `.agents/notes/implemented/` 中相关架构决策。
 - `docs/openapi/` 中受影响的契约、`docs/protocol/`
   中受影响的协议。
-- `docs/competition/` 与 `docs/plans/` 中受影响的约束（安全、权限、软删除等）。
+- `docs/competition/` 与 `docs/plans/` 中与本次改动相关的比赛约束与验收标准。
 - 受影响模块附近的测试和 fixture。
 - 测试代码变更对应的 `hwict-tests` 规则。
 

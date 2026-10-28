@@ -10,10 +10,19 @@ const rootDir = resolve(dirname(__filename), "../../../.."); // 仓库根：.age
 const notesRoot = resolve(rootDir, ".agents/notes");
 const { extractSection, markdownLinks, proseLines } = parser;
 
-const lifecycles = new Set(["proposed", "implemented", "rejected"]);
-const allLifecycles = new Set(["implemented", "proposed", "rejected", "archived"]);
-const classes = new Set(["feature", "bug-fix", "simplification", "architecture", "process", "testing"]);
-const ignoredDirs = new Set([".git", ".build", ".swiftpm", ".artifacts", "target", "dist", "node_modules"]);
+// 没有 notes 目录时直接跳过，不能因为读不到 manifest 而报错。
+if (!existsSync(notesRoot)) {
+    console.log("ok: .agents/notes 不存在，跳过 Agent Note 校验");
+    process.exit(0);
+}
+
+const manifestPath = join(notesRoot, "manifest.json");
+const knownLifecycles = new Set(["implemented", "proposed", "rejected", "archived"]);
+const manifest = loadManifest();
+const allLifecycles = new Set(manifest.lifecycles);
+const lifecycles = new Set([...allLifecycles].filter((lifecycle) => lifecycle !== "archived"));
+const classes = new Set(manifest.classes);
+const noteFileNamePattern = noteFilePatternToRegExp(manifest.noteFilePattern);
 
 const statusByLifecycle = {
     proposed: /^状态：提议中$/,
@@ -31,6 +40,77 @@ const errors = [];
 
 function fail(scope, message) {
     errors.push(`${scope} — ${message}`);
+}
+
+// manifest.json 是生命周期、分类与文件名规则的唯一来源；脚本只提供每类
+// 状态行与必备章节的语义校验，新增生命周期时必须两边同时补齐。
+function loadManifest() {
+    if (!existsSync(manifestPath)) {
+        console.error("structure: .agents/notes/manifest.json — 缺少 manifest.json，无法确定生命周期、分类与文件名规则");
+        process.exit(1);
+    }
+    let parsed;
+    try {
+        parsed = JSON.parse(readFileSync(manifestPath, "utf8"));
+    } catch (error) {
+        console.error(`structure: .agents/notes/manifest.json — 不是合法 JSON：${error.message}`);
+        process.exit(1);
+    }
+    if (!Array.isArray(parsed.lifecycles) || parsed.lifecycles.length === 0) {
+        console.error("structure: .agents/notes/manifest.json — lifecycles 必须是非空数组");
+        process.exit(1);
+    }
+    if (!Array.isArray(parsed.classes) || parsed.classes.length === 0) {
+        console.error("structure: .agents/notes/manifest.json — classes 必须是非空数组");
+        process.exit(1);
+    }
+    if (typeof parsed.noteFilePattern !== "string" || parsed.noteFilePattern.length === 0) {
+        console.error("structure: .agents/notes/manifest.json — noteFilePattern 必须是非空字符串，例如 yyyy-mm-dd-topic.md");
+        process.exit(1);
+    }
+    if (!parsed.lifecycles.includes("archived")) {
+        console.error("structure: .agents/notes/manifest.json — lifecycles 必须包含 archived");
+        process.exit(1);
+    }
+    for (const lifecycle of parsed.lifecycles) {
+        if (!knownLifecycles.has(lifecycle)) {
+            console.error(
+                `structure: .agents/notes/manifest.json — 未知生命周期 ${lifecycle}；` +
+                    "新增生命周期需同时在 verify-agent-notes.mjs 的 statusByLifecycle 与 requiredHeadings 中定义规则",
+            );
+            process.exit(1);
+        }
+    }
+    return parsed;
+}
+
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function noteFilePatternToRegExp(pattern) {
+    const tokens = {
+        yyyy: "\\d{4}",
+        mm: "\\d{2}",
+        dd: "\\d{2}",
+        topic: "[a-z0-9][a-z0-9-]*",
+    };
+    let source = "";
+    let lastIndex = 0;
+    for (const match of pattern.matchAll(/yyyy|mm|dd|topic/g)) {
+        source += escapeRegExp(pattern.slice(lastIndex, match.index));
+        source += tokens[match[0]];
+        lastIndex = match.index + match[0].length;
+    }
+    source += escapeRegExp(pattern.slice(lastIndex));
+    const leftovers = pattern.replaceAll(/yyyy|mm|dd|topic/g, "").replace(/\.md$/i, "");
+    if (/[a-z]/i.test(leftovers)) {
+        console.error(
+            `structure: .agents/notes/manifest.json — noteFilePattern 含未知占位符：${leftovers}；仅支持 yyyy / mm / dd / topic`,
+        );
+        process.exit(1);
+    }
+    return new RegExp(`^${source}$`);
 }
 
 function toRepoRelative(path) {
@@ -68,25 +148,6 @@ function validateRequiredStructure() {
         if (!existsSync(resolve(notesRoot, file))) {
             fail(`structure: .agents/notes/${file}`, "缺少 Note 目录入口文件");
         }
-    }
-
-    let manifest;
-    try {
-        manifest = JSON.parse(readFileSync(resolve(notesRoot, "manifest.json"), "utf8"));
-    } catch (error) {
-        fail("structure: .agents/notes/manifest.json", `manifest 不是合法 JSON：${error.message}`);
-        manifest = {};
-    }
-
-    const expectedLifecycles = [...allLifecycles].sort();
-    const expectedClasses = [...classes].sort();
-    const manifestLifecycles = Array.isArray(manifest.lifecycles) ? [...manifest.lifecycles].sort() : [];
-    const manifestClasses = Array.isArray(manifest.classes) ? [...manifest.classes].sort() : [];
-    if (JSON.stringify(manifestLifecycles) !== JSON.stringify(expectedLifecycles)) {
-        fail("structure: .agents/notes/manifest.json", "lifecycles 必须与校验脚本一致");
-    }
-    if (JSON.stringify(manifestClasses) !== JSON.stringify(expectedClasses)) {
-        fail("structure: .agents/notes/manifest.json", "classes 必须与校验脚本一致");
     }
 
     for (const lifecycle of allLifecycles) {
@@ -264,11 +325,6 @@ function validateArchivedNote(path) {
     if (!lines.some((line) => /^归档日期：\d{4}-\d{2}-\d{2}$/.test(line))) {
         fail(`format: ${noteRel}`, "归档 Note 必须包含 `归档日期：yyyy-mm-dd`");
     }
-}
-
-if (!existsSync(notesRoot)) {
-    console.log("ok: .agents/notes 不存在，跳过 Agent Note 校验");
-    process.exit(0);
 }
 
 validateRequiredStructure();

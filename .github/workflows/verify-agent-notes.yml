@@ -1,14 +1,10 @@
-# 改编自 Lithe-IDEA 的同名工作流：PR 触碰决策笔记时强制运行校验脚本，
-# 把本地自觉校验升级为 PR 卡点。
+# PR 触碰决策笔记时强制运行校验脚本，把本地自觉校验升级为 PR 卡点。
+# 这里刻意不加 paths 过滤：本工作流被设为 required check 时，任何 PR 都必须
+# 上报状态，否则不碰笔记的 PR 会永远停在 "Expected" 而无法合并。
 name: Verify Agent Notes
 
 on:
   pull_request:
-    paths:
-      - ".agents/notes/**"
-      - ".agents/skills/hwict-notes/**"
-      - ".github/workflows/deploy-agent-notes-board.yml"
-      - ".github/workflows/verify-agent-notes.yml"
   workflow_dispatch:
 
 permissions:
@@ -29,7 +25,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Verify Agent Notes
         run: node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs

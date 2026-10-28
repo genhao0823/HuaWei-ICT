@@ -45,8 +45,8 @@ user-invocable: true
   可访问性与结构报错。
 - `TabsTrigger` 必须在 `TabsList` 内；`Avatar` 必须带 `AvatarFallback`；
   Item 类内容放进对应 Group 容器。
-- 自定义触发器用 `asChild`（radix 系）或 `render`（base 系）传递语义
-  标签，如 `<Button asChild><Link /></Button>`。
+- 组件基座以 `web/components.json` 为准：Radix 系用 `asChild`，Base UI 系用
+  `render`；本项目当前按 Base UI 写（与 `hwict-react` 一致），不要混用。
 - 按钮无 isPending 属性：加载态用 `Spinner` + `disabled` 组合表达。
 
 ## 4. 用组件、不自制

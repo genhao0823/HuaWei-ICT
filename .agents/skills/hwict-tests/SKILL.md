@@ -16,17 +16,16 @@ user-invocable: true
 ## 1. 工具链边界
 
 - 后端：Java 21 + Maven + JUnit 5 + Mockito（`./mvnw test`），隔离 MySQL
-  集成测试沿用现有基类约定。
+  集成测试按 `references/java-spring.md` 的门控约定。
 - 前端：Vitest（`pnpm test` / `pnpm test:watch`），不引入真实浏览器或
   真实后端。
-- 本地与 CI（GitHub Actions）保持同一大版本工具链（Java 21 / Node 20）；
+- 本地与 CI（GitHub Actions）保持同一大版本工具链（Java 21 / Node 24）；
   本地能过而 CI 失败时，先比对工具链版本再怀疑测试本身。
 
 ## 2. 平台参考
 
 - Java / Spring 测试读 [references/java-spring.md](references/java-spring.md)
-- Vitest 测试读 [references/vitest-vue.md](references/vitest-vue.md)（React
-  项目沿用其稳定性规则，Vue 专属 API 部分待测试基建落地时改写）
+- React / Vitest 测试读 [references/vitest-react.md](references/vitest-react.md)
 - 共享契约或前后端行为变更时两篇都要读。
 
 ## 3. 硬性不变量

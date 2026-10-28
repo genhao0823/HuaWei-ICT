@@ -1,0 +1,31 @@
+# 校验文档引用：相对链接与反引号内的仓库路径必须存在。
+# 与 verify-agent-notes.yml 互补：那个管决策笔记格式，这个管文档不再指向
+# 已删除或不存在的文件。同样不加 paths 过滤，保证 required check 每次都能上报。
+name: Verify Docs Links
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Docs Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Verify docs links
+        run: node .agents/skills/hwict-docs/scripts/check-docs-links.mjs

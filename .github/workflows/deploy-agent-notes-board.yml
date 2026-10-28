@@ -1,6 +1,6 @@
 # 改编自 Lithe-IDEA 的同名工作流：决策笔记有变动时，校验通过后自动把
 # 工程决策看板发布到 GitHub Pages。
-# 首次运行前需在仓库 Settings → Pages 将 Source 设为 GitHub Actions。
+# Pages 已启用（Source = GitHub Actions）；重建仓库时按此设置。
 name: Deploy Agent Notes Board
 
 on:
@@ -35,7 +35,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Verify Agent Notes
         run: node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs
