@@ -81,6 +81,8 @@ docs/
 5. 产生比赛五要素相关素材时，随手归档到 `docs/competition/`
 6. 阶段性收尾或换人接手时，在 `docs/handoff/` 记录交接文档
 7. 确保文档目录的内容保持一致
+8. 提交前运行 `node .agents/skills/hwict-docs/scripts/check-docs-links.mjs`，
+   确认相对链接与仓库路径引用都存在（PR 上由 CI 自动执行）
 
 ## 其他
 

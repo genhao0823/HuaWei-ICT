@@ -123,8 +123,10 @@ user-invocable: true
 node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs
 ```
 
-该脚本同时校验 Note 格式、路径、链接、验证命令和目录骨架；新增生命周期
-或分类必须同步更新 `.agents/notes/manifest.json`、本 Skill 和校验脚本。
+脚本校验 Note 格式、路径、链接、验证命令和目录骨架。生命周期、分类和文件名
+规则以 `.agents/notes/manifest.json` 为唯一来源，校验脚本与看板脚本都读它；
+新增生命周期时还需在脚本的 `statusByLifecycle` / `requiredHeadings` 中补上
+该生命周期的状态行与必备章节，否则脚本会直接报错。
 
 ## 4. 检索流程
 
@@ -137,6 +139,10 @@ node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs
    ```bash
    rg --hidden --glob '!.agents/notes/archived/**' '<关键词>' .agents/notes/
    ```
+
+   Windows 没有 `rg` 时用 VS Code 全局搜索并排除 `archived/`，或 PowerShell：
+   `Get-ChildItem -Recurse .agents/notes -Filter *.md | Select-String '<关键词>'`
+   （再人工忽略 archived 结果）。
 
 4. 做新选型、重构或避免重复踩坑时再读取 `rejected/`。
 

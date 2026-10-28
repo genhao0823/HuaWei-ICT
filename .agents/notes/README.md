@@ -1,60 +1,48 @@
 # HuaWei-ICT Agent Notes
 
-这里是 HuaWei-ICT 给 Agent 和开发者共同维护的工程决策库。它替代过去容易过期的
-架构说明散文，只记录会影响后续实现判断的内容：为什么这样做、放弃了什么、
-怎么证明仍然成立、适用于哪些代码路径。
-
-每篇新 Note 都采用“先讲人话，再讲技术”的写法：先用几句话告诉读者最终
-决定和开发影响，再解释边界、例外、代码位置和验证方式。Note 的目标不是
-让读者显得专业，而是让不了解全部背景的开发者也能据此做出正确修改。
+`.agents/notes/` 保存 HuaWei-ICT 的工程决策：为什么这样做、放弃了什么、怎么证明
+仍然成立、适用于哪些路径。写入与读取规则以 [AGENTS.md](AGENTS.md) 为准，本文件
+只做入口和命令速查。
 
 ## 目录
 
 ```text
-.agents/notes/
-├── implemented/    # 已落地，默认读取
-├── proposed/       # 提案中，设计新方案时读取
-├── rejected/       # 已否决，避免重复踩坑时读取
-└── archived/       # 已归档，默认不读取
+implemented/   已落地，默认读取
+proposed/      提案中，设计新方案时读取
+rejected/      已否决，避免重复踩坑时读取
+archived/      已归档，默认不读取
 ```
 
-每个生命周期目录下再按类型分组：
+每个生命周期下按 `architecture` / `bug-fix` / `feature` / `process` /
+`simplification` / `testing` 分类，文件名格式 `yyyy-mm-dd-topic.md`。
 
-```text
-architecture/
-bug-fix/
-feature/
-process/
-simplification/
-testing/
-```
-
-## 使用方式
-
-修改代码前，不要全文读取所有 Note。推荐流程：
-
-1. 查看相关代码入口附近是否有 `// Note:` 反向引用。
-2. 按任务关键词检索 `.agents/notes/implemented/`。
-3. 做新方案时再查看 `.agents/notes/proposed/`。
-4. 遇到看似熟悉但可能被否过的方案时查看 `.agents/notes/rejected/`。
-
-本地校验：
+## 命令
 
 ```bash
-./scripts/verify-agent-notes.sh
+# 校验格式、路径、链接与验证命令（PR 上由 CI 自动执行）
+node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs
+
+# 生成只读看板（产物在 .artifacts/ 下，不入库）
+node .agents/skills/hwict-notes/scripts/build-agent-notes-board.mjs \
+  --bundle .agents/notes .artifacts/agent-notes-board/index.html
 ```
 
-本地生成看板：
+## 看板
+
+合入 `main` 后由 `.github/workflows/deploy-agent-notes-board.yml` 发布到
+GitHub Pages：<https://genhao0823.github.io/HuaWei-ICT/>。Pages 已启用，首次
+部署后链接生效；设置见 `docs/ops-manual/repo-setup.md`。
+
+## 检索
 
 ```bash
-node scripts/build-agent-notes-board.mjs \
-  --bundle .agents/notes .artifacts/agent-notes-board/index.html "HuaWei-ICT 工程决策看板"
+rg --hidden --glob '!.agents/notes/archived/**' '<关键词>' .agents/notes/
 ```
 
-看板是从 Note 生成的只读视图，不要手写或提交生成的 `index.html`。
+Windows 无 `rg` 时用 VS Code 全局搜索并排除 `archived/`，或：
 
-在线查看：
-
-[工程决策看板](https://1lck.github.io/HuaWei-ICT-IDEA/)
-
-该链接使用 GitHub Pages 默认地址，不依赖项目自有域名。
+```powershell
+Get-ChildItem -Recurse .agents/notes -Filter *.md |
+  Where-Object { $_.FullName -notmatch '\\archived\\' } |
+  Select-String '<关键词>'
+```

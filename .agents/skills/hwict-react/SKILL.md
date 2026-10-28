@@ -7,7 +7,8 @@ user-invocable: true
 
 # HuaWei-ICT React 前端规范
 
-> 规范蓝本来自团队既有项目 logistics-manager 的协作规范，按本仓库适配。
+> 结构与团队既有项目 logistics-manager 的协作规范同源，已按本仓库技术栈与
+> 比赛要求适配；具体配置以第 7 节基线清单为准。
 
 ## 1. 技术与目录
 
@@ -92,6 +93,21 @@ web/src/
 
 ## 7. 工程配置基线
 
-搭建 `web/` 工程时，直接照搬 logistics-manager 的 `eslint.config.js`、
-`.oxfmtrc.json`、`components.json`（shadcn 配置）与 `tsconfig` 结构，
-按本项目实际依赖微调。
+`web/` 骨架建立时按以下基线落地，不依赖任何外部仓库：
+
+- ESLint flat config（`eslint.config.js`）：TypeScript + React Hooks + TanStack
+  Router/Query 规则；CI 用 `pnpm lint` 跑全量。
+- 格式化：oxfmt + `.oxfmtrc.json`，`pnpm format` 改格式、`pnpm format:check`
+  只检查。
+- shadcn 配置：`components.json`（样式 new-york、语义色 token、`@/` 别名），
+  生成件落在 `src/components/ui/`。
+- TypeScript：`strict: true`、路径别名 `@/* -> src/*`、
+  `tsconfig.app.json` / `tsconfig.node.json` 分离。
+- Vite：`@` 别名 + TanStack Router 插件生成 `src/routeTree.gen.ts`，构建产物
+  在 `dist/`（已在 `.gitignore` 中忽略）。
+- `web/package.json` 至少提供 `dev`、`build`、`typecheck`、`lint`、`format`、
+  `format:check`、`test`、`test:watch`；骨架落地后以实际脚本为准，并同步
+  README 验证速览与 `hwict-dev` 验证矩阵。
+
+若团队另有前端基线仓库，先复制再按本清单逐项核对，把基线来源与差异记入当次
+`docs/plans/` 计划，避免两套配置长期并存。

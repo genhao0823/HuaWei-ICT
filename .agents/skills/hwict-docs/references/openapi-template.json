@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "HuaWei-ICT API",
-    "description": "HuaWei-ICT Linux 服务器性能监控系统 API 文档",
-    "version": "1.0.0",
+    "description": "HuaWei-ICT 后端 REST 契约模板。新增模块时复制本文件为 openapi-{模块名}.json，再补 paths 与按需的 schema。",
+    "version": "0.1.0",
     "contact": {
       "name": "HuaWei-ICT Team"
     }
@@ -12,34 +12,53 @@
     {
       "url": "http://localhost:8080",
       "description": "本地开发服务器"
+    },
+    {
+      "url": "https://{host}",
+      "description": "华为云部署环境；host 替换为实际域名或 IP",
+      "variables": {
+        "host": {
+          "default": "example.com",
+          "description": "替换为华为云实际域名或 IP；示例值不指向真实服务"
+        }
+      }
     }
   ],
-  "tags": [
-    {
-      "name": "auth",
-      "description": "用户认证"
-    },
-    {
-      "name": "servers",
-      "description": "服务器管理"
-    },
-    {
-      "name": "metrics",
-      "description": "性能指标"
-    },
-    {
-      "name": "commands",
-      "description": "命令执行"
-    }
-  ],
+  "tags": [],
   "paths": {},
   "components": {
     "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "description": "统一响应结构，与后端 ApiResponse<T> 对齐",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "业务状态码；0 或 200 表示成功"
+          },
+          "message": {
+            "type": "string",
+            "description": "面向调用方的可执行提示，不包含敏感值"
+          },
+          "data": {
+            "nullable": true,
+            "description": "业务数据，按具体接口定义"
+          }
+        }
+      },
       "Error": {
         "type": "object",
+        "required": ["code", "message"],
         "properties": {
-          "code": { "type": "integer" },
-          "message": { "type": "string" }
+          "code": {
+            "type": "integer",
+            "description": "错误码"
+          },
+          "message": {
+            "type": "string",
+            "description": "错误说明"
+          }
         }
       }
     },

@@ -24,7 +24,6 @@ const isForce = args.includes("--force") || args.includes("-f");
 const isMetadataOnly = args.includes("--metadata-only");
 const cleanArgs = args.filter((arg) => !arg.startsWith("--") && !arg.startsWith("-"));
 
-const LIFECYCLES = new Set(["implemented", "proposed", "rejected", "archived"]);
 const DEFAULT_TITLE = "HuaWei-ICT 工程决策看板";
 
 function usage() {
@@ -70,7 +69,29 @@ function ensureParentDirectory(path) {
     mkdirSync(dirname(path), { recursive: true });
 }
 
-function walkNoteFiles(notesDir) {
+// 生命周期列表以 .agents/notes/manifest.json 为唯一来源，与校验脚本共用同一份配置。
+function loadLifecycles(notesDir) {
+    const manifestPath = join(notesDir, "manifest.json");
+    if (!existsSync(manifestPath)) {
+        console.error(`Note 目录缺少 manifest.json：${manifestPath}`);
+        console.error("生命周期与分类以 manifest.json 为唯一来源，补齐后再生成看板。");
+        process.exit(1);
+    }
+    let manifest;
+    try {
+        manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    } catch (error) {
+        console.error(`manifest.json 不是合法 JSON：${error.message}`);
+        process.exit(1);
+    }
+    if (!Array.isArray(manifest.lifecycles) || manifest.lifecycles.length === 0) {
+        console.error("manifest.json 的 lifecycles 必须是非空数组");
+        process.exit(1);
+    }
+    return new Set(manifest.lifecycles);
+}
+
+function walkNoteFiles(notesDir, lifecycles) {
     const files = new Map();
 
     function scan(currentDir) {
@@ -85,7 +106,7 @@ function walkNoteFiles(notesDir) {
 
             const relPath = relative(notesDir, fullPath).replaceAll("\\", "/");
             const parts = relPath.split("/");
-            if (parts.length !== 3 || !LIFECYCLES.has(parts[0])) continue;
+            if (parts.length !== 3 || !lifecycles.has(parts[0])) continue;
             files.set(relPath, fullPath);
         }
     }
@@ -95,7 +116,8 @@ function walkNoteFiles(notesDir) {
 }
 
 function parseNotes(notesDir) {
-    const noteFiles = walkNoteFiles(notesDir);
+    const lifecycles = loadLifecycles(notesDir);
+    const noteFiles = walkNoteFiles(notesDir, lifecycles);
     const slugToId = new Map();
 
     for (const relPath of noteFiles.keys()) {
@@ -146,7 +168,7 @@ function renderTemplate(projectName, notes = null) {
         `id="brand-project-title">${safeProjectName}<`,
     );
     template = template.replace(
-        "/* __LITHE_AGENT_NOTES_PARSER__ */",
+        "/* __HWICT_AGENT_NOTES_PARSER__ */",
         readBrowserParserSource(),
     );
 

@@ -9,20 +9,28 @@
 ## 项目简介
 
 - **赛题**：基于华为云产品（RDS MySQL、Redis、MaaS 大模型服务）打造 AI
-  创新应用，部署在华为云，演示真实可跑（决赛组委复会现作品）。
+  创新应用，部署在华为云，演示真实可跑（决赛组委复核作品）。
 - **技术栈**：后端 Java 21 + Spring Boot（`server/`）；前端 React 19 +
   TypeScript + Vite + Tailwind + shadcn/ui（`web/`）。
 - **赛程**：报名截止 2026-11-30 → 初赛（材料评审）2026-12 →
   中国总决赛 2027-03 → 全球总决赛 2027-05。
 
+## 环境要求
+
+- 后端：JDK 21 + Maven 3.9+（`server/` 建立后统一用 Maven Wrapper）。
+- 前端：Node.js 24 与 pnpm（`web/`）。
+- Git：换行由 `.gitattributes` 统一为 LF；Windows 下无需额外配置。
+- 团队本机实测：Java 21.0.12、Maven 3.9.10、Node 24.19、pnpm 11.25。
+
 ## 仓库结构
 
 ```text
-server/    Java 后端（Spring Boot，包根 com.hwict.server）
-web/       React 前端
+server/    Java 后端（Spring Boot，包根 com.hwict.server）——待建立
+web/       React 前端——待建立
 docs/      plans 开发计划 / openapi 接口契约 / protocol 协议文档 /
            logs 开发日志 / competition 比赛材料与留痕
 .agents/   AI 协作规范（skills/）与架构决策笔记（notes/）
+.github/   CI 工作流、PR 模板、CODEOWNERS
 ```
 
 ## 队员第一次上手
@@ -82,8 +90,9 @@ docs/      plans 开发计划 / openapi 接口契约 / protocol 协议文档 /
 验证速览（改什么 → 至少跑什么，全表见 `hwict-dev` 第 2 节）：
 
 - Java 后端：`./mvnw test`
-- 前端：`pnpm typecheck` + `pnpm lint` + `pnpm test`
+- 前端：`pnpm typecheck` + `pnpm lint` + `pnpm test`（交付前 `pnpm build`；脚本以 `web/package.json` 为准）
 - 决策笔记：PR 上由 CI 自动校验
+- 文档引用：`node .agents/skills/hwict-docs/scripts/check-docs-links.mjs`
 
 ## 全局约定
 
@@ -98,3 +107,10 @@ docs/      plans 开发计划 / openapi 接口契约 / protocol 协议文档 /
 
 架构决策笔记在合入 `main` 后自动发布为网页看板：
 <https://genhao0823.github.io/HuaWei-ICT/>
+
+Pages 已启用（Source = GitHub Actions）；首次由 `main` 触发部署后该地址生效，
+设置与排障见 `docs/ops-manual/repo-setup.md`。
+
+## 许可证
+
+MIT，见 [LICENSE](LICENSE)。

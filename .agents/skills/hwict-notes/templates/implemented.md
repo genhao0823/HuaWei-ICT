@@ -42,8 +42,8 @@
 
 ## 验证
 
-- `./scripts/example.sh`
+- `./mvnw test`
 
 ## 适用范围
 
-- `path/to/owning/code/`
+- `docs/`
