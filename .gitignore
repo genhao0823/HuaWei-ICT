@@ -1,0 +1,19 @@
+# Agent 产物与本地工具缓存
+.artifacts/
+.zcode/
+node_modules/
+dist/
+build/
+
+# 环境与凭据（严禁入库）
+.env
+.env.*
+*.pem
+*.key
+
+# IDE 与系统临时文件
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db

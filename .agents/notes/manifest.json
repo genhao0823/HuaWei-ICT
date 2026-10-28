@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "language": "zh-CN",
+  "root": ".agents/notes",
+  "lifecycles": [
+    "implemented",
+    "proposed",
+    "rejected",
+    "archived"
+  ],
+  "classes": [
+    "architecture",
+    "bug-fix",
+    "feature",
+    "process",
+    "simplification",
+    "testing"
+  ],
+  "noteFilePattern": "yyyy-mm-dd-topic.md",
+  "generatedBoard": {
+    "script": ".agents/skills/hwict-notes/scripts/build-agent-notes-board.mjs",
+    "artifact": ".artifacts/agent-notes-board/index.html"
+  },
+  "verification": {
+    "script": ".agents/skills/hwict-notes/scripts/verify-agent-notes.mjs"
+  }
+}
