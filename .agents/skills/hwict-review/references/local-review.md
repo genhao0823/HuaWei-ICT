@@ -17,11 +17,11 @@
 
 按变更路径读取最相关的：
 
-- 相关的 `hwict-*` 编码规范 skill（java / vue3 / kotlin / go / mysql / docker）。
+- 相关的 `hwict-*` 编码规范 skill（java / mysql / react / shadcn / react-perf）。
 - `.agents/notes/implemented/` 中相关架构决策。
 - `docs/openapi/` 中受影响的契约、`docs/protocol/`
   中受影响的协议。
-- `项目需求与规范.md` 中受影响的约束（安全、权限、软删除等）。
+- `docs/competition/` 与 `docs/plans/` 中受影响的约束（安全、权限、软删除等）。
 - 受影响模块附近的测试和 fixture。
 - 测试代码变更对应的 `hwict-tests` 规则。
 
@@ -33,9 +33,9 @@ Note。
 从变更文件开始，沿真实调用链检查：
 
 - 被修改的声明、调用方和实现方。
-- 跨进程、跨语言或跨端边界（Java 后端 ↔ Vue 前端 ↔ Go Agent ↔ Android）。
-- OpenAPI 契约、错误码、序列化字段和前端 `src/types/api.d.ts`。
-- WebSocket / RabbitMQ 消息契约（`docs/protocol/`）。
+- 跨进程或跨端边界（Java 后端 ↔ React 前端 ↔ 华为云服务）。
+- OpenAPI 契约、错误码、序列化字段和前端 `src/types/` 类型定义。
+- WebSocket / SSE 消息契约（`docs/protocol/`）。
 - 成功、失败、取消、超时和资源清理路径。
 - 直接受影响的测试、验证脚本和文档（OpenAPI、协议、开发日志）。
 
@@ -52,9 +52,8 @@ Note。
 未实际运行的测试。
 
 需要执行验证时，先说明原因和范围，并只运行与当前问题直接相关的验证
-（如 `./mvnw test -Dtest=...`、`npm run test -- <file>`、
-`npm run openapi:check`）。不要为了 Review 自动启动完整环境、数据库或
-长时间构建。
+（如 `./mvnw test -Dtest=...`、`pnpm test -- <file>`）。不要为了
+Review 自动启动完整环境、数据库或长时间构建。
 
 ## 5. 交付结论
 

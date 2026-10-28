@@ -40,7 +40,7 @@
 当改动新增或扩大工具类能力（加解密、重试、限流、审批流、报表、日期处理、
 HTTP 客户端封装等）时，必须检查：
 
-1. 已引入依赖（Spring 生态、MyBatis、Element Plus、ECharts、gopsutil 等）
+1. 已引入依赖（Spring 生态、MyBatis、shadcn/ui、TanStack 系列、ECharts 等）
    或官方扩展点是否已提供该能力。
 2. 是否有证据表明升级依赖或使用扩展点仍无法满足明确需求，而不是为了
    绕过暂时的集成困难建立长期平行实现。
@@ -61,22 +61,19 @@ HTTP 客户端封装等）时，必须检查：
 ## HuaWei-ICT 特别边界
 
 - 后端工程固定为 `server/`，包结构 `com.hwict.server/`
-  下按 config/common/security/module/websocket/ssh/scheduler 分层；业务
-  模块在 `module/` 下按 controller/service/mapper/entity/dto/vo 组织。
+  下按 config/common/security/module/client 分层；业务模块在 `module/`
+  下按 controller/service/mapper/entity/dto/vo 组织。
 - **OpenAPI JSON（`docs/openapi/`）是 REST 契约唯一事实源**：
-  改接口必须同步契约，前端 `src/types/api.d.ts` 与之对齐，
-  `npm run openapi:check` 必须通过。
-- WebSocket / RabbitMQ 消息契约以 `docs/protocol/` 冻结文档
-  为准（如 `message-contracts-v1.md`、`rabbitmq-topology-v1.md`）；改消息
-  结构必须同步协议文档并评估 Agent 兼容性。
-- 安全敏感区：JWT 配置、AES-256-GCM 密钥管理、SSH 凭据加密存储与日志
-  脱敏、Agent Token 发放、admin 角色校验、软删除策略。涉及这些区域的
-  改动默认提高一级审查严格度。
+  改接口必须同步契约，前端 `src/types/<module>.ts` 类型定义与之对齐
+  （细则见 `hwict-react`）。
+- WebSocket / SSE 消息契约以 `docs/protocol/` 冻结文档为准；改消息结构
+  必须同步协议文档并评估对已有调用方的兼容性。
+- 安全敏感区：JWT 配置与密钥管理、华为云 AK/SK 与 MaaS API Key 的读取
+  路径、admin 角色校验、软删除策略、日志脱敏。涉及这些区域的改动默认
+  提高一级审查严格度。
 - **已执行到任何共享环境的 Flyway 迁移脚本不得修改**，只能新增版本脚本。
-- 前端必须经 `src/api/client.ts` 统一拦截器（40100/40300 跳转、
-  `X-Correlation-ID`），不得绕过直连 axios。
-- Go Agent 改动必须保持"先落盘后发送、单帧未确认、有界资源"的可靠上报
-  约束（见 `hwict-go` skill）。
+- 前端 HTTP 调用统一走 `src/lib/` 中的请求封装（见 `hwict-react`），
+  不得在组件里散落直连后端。
 - 架构取舍与高风险约束以 `.agents/notes/implemented/` 为准。
 - 测试问题必须结合 `hwict-tests` 规则判断，重点关注有界等待、
   确定性时间、取消和清理。
