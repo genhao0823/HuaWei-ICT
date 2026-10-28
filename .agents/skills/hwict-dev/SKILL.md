@@ -65,14 +65,17 @@ user-invocable: true
 | REST 契约 | 更新 `docs/openapi/` 对应 JSON + 前端类型定义对齐 |
 | 前端 | `pnpm typecheck` + `pnpm lint` + `pnpm test`（`web/`） |
 | 数据库迁移 | 只新增 Flyway 版本脚本（不改已执行脚本）+ `./mvnw test` |
-| 决策笔记 | `node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs` |
+| 决策笔记 | `node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs`（PR 上由 CI 自动执行） |
 | 比赛/项目文档 | 交叉引用的路径存在；不含真实凭据、内网 IP |
+| CI 工作流（`.github/workflows/`） | YAML 缩进与触发路径自查；实际运行以 Actions 首次执行为准 |
 
 ## 3. 通用原则
 
 - **复用成熟依赖优先**：写工具类能力（加解密、重试、限流、HTTP 封装等）
-  前，先确认 Spring / shadcn / 已有 utils / 华为云 SDK 是否已提供；禁止因
-  "跨端"或"接入麻烦"建立平行实现。确需自研，把证据与边界记入决策笔记。
+  前，先确认 Spring / shadcn / 已有 utils / 华为云 SDK 是否已提供；升级或
+  启用既有能力能解决的不写并行实现，禁止因"跨端"或"接入麻烦"建立平行
+  实现。确需自研，把证据、被否的复用选项和边界记入决策笔记。遵守上游
+  许可，不逆向或复制专有工具。
 - **显式失败处理**：不吞异常、不用异常做正常流程控制；错误要么处理、要么
   带上下文上抛；用户可见失败信息可执行、不泄露敏感值。
 - **不硬编码环境细节**：凭据、密钥、机器路径、内网 IP 不入代码与测试

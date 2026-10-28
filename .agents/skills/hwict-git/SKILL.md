@@ -43,6 +43,7 @@ user-invocable: true
 | docs | 文档（含比赛材料） |
 | deploy | 部署与云资源相关 |
 | competition | 比赛报名、材料与留痕 |
+| ci | CI 工作流与 GitHub 仓库配置（`.github/`） |
 
 ### 示例
 
@@ -68,6 +69,7 @@ docs(readme): 更新项目 README 和部署文档
 | 分支类型 | 命名格式 | 示例 |
 |------|---------|------|
 | 主分支 | main | main |
+| 集成分支 | preview | preview（PR 的合入目标） |
 | 功能分支 | feat/功能描述 | feat/server-auth |
 | 修复分支 | fix/修复描述 | fix/web-chart-update |
 | 文档分支 | docs/文档描述 | docs/api-doc |
@@ -78,7 +80,9 @@ docs(readme): 更新项目 README 和部署文档
 - 一个 commit 只做一件事
 - 硬性要求：每完成一个模块功能，必须提交一次本地 Git commit
 - 模块功能包括但不限于：后端接口模块、数据库迁移模块、认证模块、核心 AI 能力模块、前端页面模块、文档阶段成果、比赛材料阶段成果
-- **不要提交未完成的功能代码到 main 分支**（功能分支开发，PR 由队长批准合入）
+- **PR 一律合入 preview 分支**（不直接合 main）：功能分支开发，PR 目标为
+  preview，由队长批准合入；preview 阶段性稳定后，由队长从 preview 合入
+  main，main 始终保持可部署
 - 提交前确保代码能编译通过
 - 提交前的检查清单见第 4 节
 
@@ -86,7 +90,7 @@ docs(readme): 更新项目 README 和部署文档
 
 - `git status` 确认 working tree 干净或只含本模块预期改动
 - `git diff` 确认无意外修改
-- 目标分支正确（不要误推到 main / 别人分支）
+- 目标分支正确：PR 目标为 preview（不是 main）；本地不直接推 main 或他人分支
 - remote 配置正确
 - 未跟踪文件已被有意处理（不是构建产物或敏感文件）
 - 没有 `.env` / 密码 / Token / 证书 / 私钥 / 数据库备份

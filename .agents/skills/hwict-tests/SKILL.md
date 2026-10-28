@@ -19,6 +19,8 @@ user-invocable: true
   集成测试沿用现有基类约定。
 - 前端：Vitest（`pnpm test` / `pnpm test:watch`），不引入真实浏览器或
   真实后端。
+- 本地与 CI（GitHub Actions）保持同一大版本工具链（Java 21 / Node 20）；
+  本地能过而 CI 失败时，先比对工具链版本再怀疑测试本身。
 
 ## 2. 平台参考
 
@@ -35,6 +37,9 @@ user-invocable: true
 - **不用真实 sleep 同步状态**：不写 `Thread.sleep(n)` 等"给后台一点时间"；
   注入时钟 / 调度器 / 事件 / CompletableFuture / 可控替身，等可观察
   事件而不是等时间。
+- **不为编译通过把阻塞等待藏进后台任务**：不把阻塞等待挪进 detached
+  线程 / 后台 Executor / fire-and-forget Promise 来让异步测试编译通过；
+  禁止阻塞事件循环或 UI 线程。
 - **每个资源有唯一 owner 和清理路径**：线程、定时器、Executor、WebSocket
   连接、Mockito stub、Vitest 定时器/监听器/订阅，在断言失败时也要释放
   （`@AfterEach` / `defer` / `finally` / `unmockAll()` / `vi.restoreAllMocks()`）。

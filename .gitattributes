@@ -1,0 +1,23 @@
+# 统一换行符（做法改编自 Lithe-IDEA，按本仓库技术栈简化）：
+# 文本文件一律以 LF 入库、检出也保持 LF，避免 Windows/Mac 混合团队协作时
+# 的换行符漂移。Windows 下 VS Code / IDEA 均可直接编辑 LF 文件。
+* text=auto eol=lf
+
+# Windows 脚本例外：批处理必须 CRLF 才能被执行
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 常见二进制文件：禁止任何换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.jar binary
+*.zip binary
+*.pdf binary
