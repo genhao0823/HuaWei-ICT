@@ -1,0 +1,35 @@
+# 改编自 Lithe-IDEA 的同名工作流：PR 触碰决策笔记时强制运行校验脚本，
+# 把本地自觉校验升级为 PR 卡点。
+name: Verify Agent Notes
+
+on:
+  pull_request:
+    paths:
+      - ".agents/notes/**"
+      - ".agents/skills/hwict-notes/**"
+      - ".github/workflows/deploy-agent-notes-board.yml"
+      - ".github/workflows/verify-agent-notes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-agent-notes-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Agent Notes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify Agent Notes
+        run: node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs
