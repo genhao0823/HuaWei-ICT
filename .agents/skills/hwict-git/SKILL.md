@@ -92,6 +92,7 @@ docs(readme): 更新项目 README 和部署文档
 - `git diff` 确认无意外修改
 - 目标分支正确：PR 目标为 preview（不是 main）；本地不直接推 main 或他人分支
 - remote 配置正确
+- `git config user.email` 与 GitHub 账号绑定邮箱一致，否则提交不归属账号、显示 unverified
 - 未跟踪文件已被有意处理（不是构建产物或敏感文件）
 - 没有 `.env` / 密码 / Token / 证书 / 私钥 / 数据库备份
 

@@ -4,8 +4,10 @@
 
 ## 目标分支
 
+> 发布 PR（`preview → main`）跳过本节，由队长按发布流程处理。
+
 - [ ] 目标分支是 `preview`（不是 `main`）
-- [ ] 分支从最新 `preview` 拉出
+- [ ] 分支已与最新 `preview` 同步（rebase/merge），`verify-docs.yml` 在分支中
 - [ ] 一个 PR 只做一件事
 
 ## 验证
