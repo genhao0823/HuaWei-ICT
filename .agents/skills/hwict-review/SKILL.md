@@ -40,8 +40,8 @@ user-invocable: true
 1. `.agents/skills/hwict-dev/SKILL.md`
 2. 与本次变更相关的 `hwict-*` 编码规范 skill（java / mysql / react /
    shadcn / react-perf，按涉及目录选择）。
-3. 相关的 `.agents/notes/implemented/` 决策笔记、`docs/openapi/`
-   契约与 `docs/competition/` 中受影响的比赛约束。
+3. 相关的 `.agents/notes/implemented/` 决策笔记与 `docs/openapi/` 契约；
+   改动涉及 `docs/competition/` 时，再读其中受影响的赛事材料。
 4. 如果变更涉及测试，再加载 `.agents/skills/hwict-tests/SKILL.md`。
 
 审查默认只读，不修改文件、不提交、不推送、不创建 PR。除非用户另外明确

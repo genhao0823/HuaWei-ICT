@@ -7,8 +7,8 @@ user-invocable: true
 
 # HuaWei-ICT React 前端规范
 
-> 结构与团队既有项目 logistics-manager 的协作规范同源，已按本仓库技术栈与
-> 比赛要求适配；具体配置以第 7 节基线清单为准。
+> 结构与团队既有项目 logistics-manager 的协作规范同源，已按本仓库技术栈
+> 适配；具体配置以第 7 节基线清单为准。
 
 ## 1. 技术与目录
 
@@ -83,7 +83,7 @@ web/src/
 - 动效叠加在统一的设计系统上（见 `hwict-ui-design`），先定风格档位再上
   动效，不逐页临时发挥。
 - 首屏/演示页可用 ReactBits 组件与 anime.js 做第一印象；核心操作路径
-  保持轻量，动画不得拖慢交互（决赛需现场答辩与复现）。
+  保持轻量，动画不得拖慢交互。
 - 遵守 `prefers-reduced-motion`；禁用动画 width/height 等触发布局的属性，
   优先 transform/opacity。
 
