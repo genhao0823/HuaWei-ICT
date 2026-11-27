@@ -8,7 +8,7 @@ user-invocable: true
 # HuaWei-ICT React 性能规范
 
 > 规则精选自 Vercel react-best-practices（MIT）公开规则，自写精简版。
-> Demo 规模下先按正常写法开发，出现卡顿再按本 skill 排查；但"消瀑布流"
+> 当前规模下先按正常写法开发，出现卡顿再按本 skill 排查；但"消瀑布流"
 > 与"禁 barrel file"两条从第一天遵守。
 
 ## 1. 消除请求瀑布流（CRITICAL，第一天遵守）

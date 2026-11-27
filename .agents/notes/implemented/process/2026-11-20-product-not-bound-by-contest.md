@@ -16,6 +16,7 @@ Cloide 要做成完整、可长期维护的企业级自托管 AI 软件工程平
 - `docs/competition/` 只引用上述事实并做可选的赛事或展示映射。开发工具、开源托管地点等条款以官方原文为准，仓库内转述不写成权威结论，也不作为一般开发前置条件。
 - 不因赛事需要改 MIT 许可，不删除第三方许可义务，不提前启动 `web/`。
 - 总体规划等历史规划文件只追加现行说明，不把旧文改写成「当时就已经是这个方向」。
+- `hwict-react`、`hwict-react-perf`、`hwict-ui-design` 与 `hwict-review` 按产品体验表述要求，不以赛程、评分点或答辩场景作为规则理由；自审只在改动涉及 `docs/competition/` 时读取其中的材料。
 - 未实现能力保持规划口径；量化数字必须写明记录日期与范围。
 
 ### 正确做法
@@ -54,3 +55,8 @@ Cloide 要做成完整、可长期维护的企业级自托管 AI 软件工程平
 - `CONTRIBUTING.md`
 - `docs/plans/20261112-企业自托管AI软件工程平台总体规划.md`
 - `.agents/skills/hwict-docs/SKILL.md`
+- `.agents/skills/hwict-react/SKILL.md`
+- `.agents/skills/hwict-react-perf/SKILL.md`
+- `.agents/skills/hwict-ui-design/SKILL.md`
+- `.agents/skills/hwict-review/SKILL.md`
+- `.agents/skills/hwict-review/references/local-review.md`
