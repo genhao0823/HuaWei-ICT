@@ -25,6 +25,7 @@ user-invocable: true
 | `server/`（Java/Spring Boot 后端） | `hwict-java` |
 | `agent/`（Go 1.23 采集 Agent） | `hwict-go`（待建）；当前按 `go vet ./... && go test ./...` |
 | `android/`（Kotlin 2.0.21 + Compose 客户端） | `hwict-android`（待建）；当前按 `./gradlew :app:testDebugUnitTest` |
+| `worker/`（Node.js 24 Pi 编码节点与 Java 符号查询） | `hwict-worker`（待建）；当前按 `npm ci --ignore-scripts && npm test` |
 | 数据库设计 / SQL / Flyway 迁移（RDS MySQL） | `hwict-mysql` |
 | 后续明确选用 React 或 shadcn/ui 并授权相应前端开发时 | 按选择加载 `hwict-react`、`hwict-shadcn`、`hwict-ui-design` 或 `hwict-react-perf` |
 | Git 提交 / 分支 / 合并 | `hwict-git` |
@@ -47,12 +48,15 @@ user-invocable: true
 | Java 后端 | `./mvnw test`（`server/`） |
 | Go Agent | `go vet ./...` + `go test ./...`（`agent/`） |
 | Android | `./gradlew :app:testDebugUnitTest`（`android/`）；交付前 `assembleDebug` |
+| 编码节点 | `npm ci --ignore-scripts` 后 `npm test`（`worker/`） |
+| 工作区网关 `session-guard` | `go vet ./...` + `go test -race ./...`（`deploy/workspace/session-guard/`） |
+| 中间件恢复脚本 | `python deploy/middleware/smoke.py <service>`（`deploy/middleware/`，`service` 取 postgres / redis-cache / redis-persistent / rabbitmq，需要本机 Docker） |
 | REST 契约 | 更新 `docs/openapi/` 对应 JSON，运行 `node scripts/check-openapi.mjs` 并用后端接口测试核对字段、授权和状态码 |
 | 数据库迁移 | 只新增 Flyway 版本脚本（不改已执行脚本）+ `./mvnw test` |
 | 决策笔记 | `node .agents/skills/hwict-notes/scripts/verify-agent-notes.mjs`（PR 上由 CI 自动执行） |
 | 文档 / 链接 | `node .agents/skills/hwict-docs/scripts/check-docs-links.mjs`（PR 上由 CI 自动执行） |
 | 比赛/项目文档 | 交叉引用的路径存在；不含真实凭据、内网 IP |
-| CI 工作流（`.github/workflows/`） | YAML 缩进与触发路径自查；以最近一次 Actions 运行记录为准；代码 PR 会运行 对应后端、Agent 及已有 Android 客户端的适用检查，加入分支保护后作为合并门禁 |
+| CI 工作流（`.github/workflows/`） | YAML 缩进与触发路径自查；以最近一次 Actions 运行记录为准；每个 PR 都触发 Verify Server / Agent / Android / Web；改动命中 `worker/**` 时触发 Verify Coding Worker，命中 `deploy/workspace/**` 或 `deploy/middleware/**` 时触发 Verify workspace gateway and middleware recovery；加入分支保护后作为合并门禁 |
 
 ## 3. 开发与联调环境
 

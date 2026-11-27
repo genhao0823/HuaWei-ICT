@@ -109,6 +109,7 @@ docker compose up -d
 | 后端 Java | `hwict-java` | Controller 只做参数与响应，业务在 Service；凭据只走环境变量 |
 | Go Agent | `hwict-go`（待建） | 地址与 Token 只走环境变量；PTY/命令默认关闭 |
 | Android | `hwict-android`（待建） | 不硬编码后端地址；release 必须注入 `BASE_URL`/`WS_URL` |
+| 编码节点 | `hwict-worker`（待建） | `npm test` 走只监听回环的模拟模型 |
 | 前端选型 | 由项目负责人另行确定 | 本轮交付后端契约与接入手册 |
 | 数据库 | `hwict-mysql` | **已执行的 Flyway 脚本永不修改**，只新增版本脚本 |
 | 测试 | `hwict-tests` | 每个等待有超时；不依赖真实网络与真实时间 |
@@ -121,9 +122,10 @@ docker compose up -d
 - Java 后端：`./mvnw test`
 - Go Agent：`go vet ./...` + `go test ./...`
 - Android：`./gradlew :app:testDebugUnitTest`
+- 编码节点：先 `npm ci --ignore-scripts`，再 `npm test`（`worker/`）
 - 工程接口：`node scripts/check-openapi.mjs`，核对管理端与节点端契约。
 - 决策笔记：PR 上由 CI 自动校验
-- 代码 PR：会运行 `Verify Server` / `Verify Agent` / `Verify Android` / `Verify Web`
+- 代码 PR：每个 PR 都触发 `Verify Server` / `Verify Agent` / `Verify Android` / `Verify Web`，按改动路径再加 `Verify Coding Worker` 与 `Verify workspace gateway and middleware recovery`
   （目录不存在时跳过；加入分支保护后作为合并门禁）
 - 文档引用：`node .agents/skills/hwict-docs/scripts/check-docs-links.mjs`
 - OpenAPI 契约：`node scripts/check-openapi.mjs`
