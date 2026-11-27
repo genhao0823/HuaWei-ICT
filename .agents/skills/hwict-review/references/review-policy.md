@@ -60,9 +60,10 @@ HTTP 客户端封装等）时，必须检查：
 
 ## HuaWei-ICT 特别边界
 
-- 后端工程固定为 `server/`，包结构 `cloide.server/`
-  下按 config/common/security/module/client 分层；业务模块在 `module/`
-  下按 controller/service/mapper/entity/dto/vo 组织。
+- 后端工程固定为 `server/`，包根 `cloide.server`，顶层按 common/config/
+  module/scheduler/security/ssh/websocket 分层，云服务 SDK 封装放 `client/`
+  （尚未建立）；业务模块在 `module/` 下按 controller/service/mapper/
+  entity/dto/vo 组织。
 - Go Agent 固定为 `agent/`：不持有数据库凭据；只通过环境变量读取后端地址
   与 Agent Token；Linux PTY 与命令执行默认关闭。
 - Android 固定为 `android/`：不硬编码后端地址；release 构建必须通过

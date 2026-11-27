@@ -38,13 +38,20 @@ Spring Boot 3.4.13 / MyBatis-Plus 3.5.12 / springdoc 2.8.9 / OpenAPI 3.0.3，
 Java 后端工程目录固定为 `server/`。
 
 ```text
-server/src/main/java/com/hwict/server/
-├── config/
+server/src/main/java/cloide/server/
 ├── common/
-├── security/
+├── config/
 ├── module/
-└── client/          # 华为云服务（MaaS 大模型、OBS 等）SDK 封装
+├── scheduler/
+├── security/
+├── ssh/
+└── websocket/
 ```
+
+`scheduler/` 放定时任务（Outbox 投递、数据清理、巡检），`ssh/` 放 SSH 出站
+策略与连通性测试，`websocket/` 放 Agent、Monitor、终端三类通道的端点与连接
+管理。`client/` 尚未建立：需要封装云服务 SDK 时按第 7 节新建，不放进
+业务模块；模型调用是例外，入口在 `module/ai/provider`。
 
 业务模块放在 `module/` 下，每个模块推荐结构：
 
@@ -81,7 +88,7 @@ server/src/main/java/com/hwict/server/
 ## 7. 安全规范
 
 - JWT 密钥、华为云 AK/SK、MaaS API Key 等凭据只从配置或环境变量读取，不硬编码、不入库
-- 对华为云服务（MaaS、RDS、Redis、OBS 等）的调用统一封装在 `client/` 层，失败显式处理，不在业务代码中散落 SDK 调用
+- 对华为云服务（RDS、Redis、OBS 等）的 SDK 调用统一封装在 `client/` 层（尚未建立，首次接入时新建），失败显式处理，不在业务代码中散落 SDK 调用；模型调用不经云服务 SDK，是例外：入口统一在 `module/ai/provider`
 - 管理类接口必须校验角色/权限
 - 涉及 AI 生成内容对外展示时，注意提示词注入与敏感内容过滤，用户输入不直接拼接进系统提示词
 

@@ -27,7 +27,7 @@ user-invocable: true
 - Note 记录"为什么这样做、放弃了什么、怎么证明仍然成立"。不要复制
   API 参考、字段全集、命令手册或代码能直接表达的实现细节。
 - 修改架构边界、前后端契约、安全策略、测试策略、部署流程或高风险
-  模块（华为云 client 调用、认证与安全、大模型提示词链路）前，先检索相关 Note，再改代码。
+  模块（云服务 SDK 调用、认证与安全、大模型提示词链路）前，先检索相关 Note，再改代码。
 
 ## 2. 路径和生命周期
 
@@ -175,7 +175,7 @@ node .agents/skills/hwict-notes/scripts/build-agent-notes-board.mjs \
 // Note: 华为云 MaaS 调用与凭据管理策略见 .agents/notes/implemented/architecture/ 相关笔记
 ```
 
-适合绑定的位置包括启动类、安全配置、华为云 client 层入口、OpenAPI 契约
+适合绑定的位置包括启动类、安全配置、云服务 SDK 封装入口、OpenAPI 契约
 对应的核心 Controller、Flyway 迁移目录和共享工具入口。迁移已有代码时，只给
 这些入口补索引。
 

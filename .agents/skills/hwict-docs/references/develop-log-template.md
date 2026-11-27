@@ -16,7 +16,7 @@
 
 ## 涉及文件
 
-- server/src/main/java/com/hwict/server/module/example/ExampleController.java
+- server/src/main/java/cloide/server/module/example/ExampleController.java
 - docs/openapi/openapi-example.json
 
 ## 当前进度
